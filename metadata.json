@@ -1,9 +1,9 @@
 {
-  "name": "Site em 3 Dias - Fast Lead",
+  "name": "Site em 3 Dias - TechExpress",
   "description": "Landing page de alta conversão para captura de leads interessados em desenvolvimento ágil de sites (72 horas).",
   "requestFramePermissions": [],
   "deployment": {
-    "platform": "github-pages",
-    "notes": "Certifique-se de adicionar um arquivo vazio chamado .nojekyll na raiz do repositório se houver pastas começando com underscore."
+    "platform": "vercel",
+    "notes": "Configurado para deployment otimizado na Vercel com suporte a SPA routing."
   }
 }
