@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ArrowRight, Loader2, Phone, User } from 'lucide-react';
+import { ArrowRight, Loader2, User, MessageSquare } from 'lucide-react';
 
 interface LeadFormProps {
   onComplete: () => void;
@@ -43,21 +43,18 @@ const LeadForm: React.FC<LeadFormProps> = ({ onComplete }) => {
       });
 
       if (!response.ok) {
-        throw new Error('Erro ao enviar dados para o webhook');
+        throw new Error('Erro ao enviar dados');
       }
 
       onComplete();
     } catch (error) {
       console.error('Erro na submissão:', error);
-      // Mesmo com erro, chamamos o onComplete para não quebrar a experiência do usuário
-      // em um cenário de captura de lead, ou poderíamos exibir um feedback de erro amigável.
       onComplete();
     } finally {
       setLoading(false);
     }
   };
 
-  // Simple phone mask simulation for (XX) XXXXX-XXXX
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value.replace(/\D/g, "");
     if (value.length <= 11) {
@@ -67,57 +64,87 @@ const LeadForm: React.FC<LeadFormProps> = ({ onComplete }) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
-      <div className="space-y-2">
-        <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider ml-1">Nome Completo</label>
+      {/* Input de Nome */}
+      <div className="group relative space-y-2">
+        <div className="flex justify-between items-center px-1">
+          <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1.5">
+            <User size={10} className="text-cyan-500" />
+            Identificação
+          </label>
+        </div>
         <div className="relative">
-          <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
           <input
             required
             type="text"
-            placeholder="Como podemos te chamar?"
+            placeholder="Seu nome ou empresa"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 transition-all"
+            className="w-full bg-slate-900/40 border border-white/5 rounded-2xl py-4 pl-5 pr-4 text-white placeholder:text-slate-600 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 transition-all duration-300 text-sm shadow-inner group-hover:border-white/10"
           />
+          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-cyan-500/0 via-cyan-500/0 to-cyan-500/0 group-focus-within:via-cyan-500/5 pointer-events-none transition-all duration-500"></div>
         </div>
       </div>
 
-      <div className="space-y-2">
-        <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider ml-1">WhatsApp</label>
+      {/* Input de Telefone */}
+      <div className="group relative space-y-2">
+        <div className="flex justify-between items-center px-1">
+          <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1.5">
+            <MessageSquare size={10} className="text-cyan-500" />
+            WhatsApp
+          </label>
+        </div>
         <div className="relative">
-          <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
           <input
             required
             type="tel"
             placeholder="(00) 00000-0000"
             value={formatPhone(phone)}
             onChange={handlePhoneChange}
-            className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 transition-all"
+            className="w-full bg-slate-900/40 border border-white/5 rounded-2xl py-4 pl-5 pr-4 text-white placeholder:text-slate-600 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 transition-all duration-300 text-sm shadow-inner group-hover:border-white/10"
           />
+          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-cyan-500/0 via-cyan-500/0 to-cyan-500/0 group-focus-within:via-cyan-500/5 pointer-events-none transition-all duration-500"></div>
         </div>
       </div>
 
-      <button
-        disabled={loading || !name || phone.length < 10}
-        type="submit"
-        className="group w-full relative overflow-hidden bg-gradient-to-r from-cyan-500 to-indigo-600 text-white font-bold py-5 rounded-xl transition-all hover:shadow-[0_0_30px_rgba(6,182,212,0.4)] active:scale-[0.98] disabled:opacity-50 disabled:hover:shadow-none disabled:active:scale-100"
-      >
-        <div className="relative z-10 flex items-center justify-center gap-2">
-          {loading ? (
-            <Loader2 className="animate-spin" size={20} />
-          ) : (
-            <>
-              QUERO MEU SITE EM 3 DIAS
-              <ArrowRight className="group-hover:translate-x-1 transition-transform" size={20} />
-            </>
-          )}
-        </div>
-        <div className="absolute inset-0 bg-white/10 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300"></div>
-      </button>
+      {/* Botão de Ação */}
+      <div className="pt-2">
+        <button
+          disabled={loading || !name || phone.length < 10}
+          type="submit"
+          className="relative w-full group overflow-hidden rounded-2xl p-[1px] transition-all active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none"
+        >
+          {/* Animated Border Gradient */}
+          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 via-indigo-500 to-cyan-500 bg-[length:200%_auto] animate-[gradient_3s_linear_infinite] opacity-100"></div>
+          
+          <div className="relative bg-white text-black py-4 px-6 rounded-[15px] flex items-center justify-center gap-3 transition-colors group-hover:bg-transparent group-hover:text-white">
+            {loading ? (
+              <Loader2 className="animate-spin" size={20} />
+            ) : (
+              <>
+                <span className="font-black text-xs uppercase tracking-tight">Quero meu site em 3 dias</span>
+                <ArrowRight className="group-hover:translate-x-1.5 transition-transform duration-300" size={18} />
+              </>
+            )}
+          </div>
+        </button>
+      </div>
 
-      <p className="text-[10px] text-center text-slate-500 leading-tight">
-        Ao clicar, você concorda em receber o contato de um de nossos especialistas em desenvolvimento ágil via WhatsApp.
-      </p>
+      {/* Trust Tagline */}
+      <div className="flex items-center justify-center gap-4 opacity-30 pt-1">
+        <div className="h-[1px] w-8 bg-gradient-to-r from-transparent to-slate-500"></div>
+        <p className="text-[8px] text-slate-400 font-bold uppercase tracking-[0.3em]">
+          Especialista disponível agora
+        </p>
+        <div className="h-[1px] w-8 bg-gradient-to-l from-transparent to-slate-500"></div>
+      </div>
+      
+      <style>{`
+        @keyframes gradient {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+      `}</style>
     </form>
   );
 };
