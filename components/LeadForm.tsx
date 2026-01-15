@@ -11,33 +11,58 @@ const LeadForm: React.FC<LeadFormProps> = ({ onComplete }) => {
   const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name || phone.length < 10) return;
-    
-    setLoading(true);
-    // Simulating API call
-    setTimeout(() => {
-      setLoading(false);
-      onComplete();
-    }, 1500);
-  };
-
-  // Simple phone mask simulation for (XX) XXXXX-XXXX
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value.replace(/\D/g, "");
-    if (value.length <= 11) {
-      setName(prev => name); // Keep current name
-      setPhone(value);
-    }
-  };
-
   const formatPhone = (val: string) => {
     if (!val) return "";
     let clean = val.replace(/\D/g, "");
     if (clean.length <= 2) return `(${clean}`;
     if (clean.length <= 7) return `(${clean.slice(0, 2)}) ${clean.slice(2)}`;
     return `(${clean.slice(0, 2)}) ${clean.slice(2, 7)}-${clean.slice(7, 11)}`;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name || phone.length < 10) return;
+    
+    setLoading(true);
+    
+    try {
+      const webhookUrl = 'https://n8n-n8n-start.kof6cn.easypanel.host/webhook/f5862221-54eb-48f0-a1e7-2d760f3b56f6';
+      
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: name,
+          phone: formatPhone(phone),
+          raw_phone: phone,
+          source: 'instagram_ad_express_site',
+          submitted_at: new Date().toISOString(),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao enviar dados para o webhook');
+      }
+
+      onComplete();
+    } catch (error) {
+      console.error('Erro na submissão:', error);
+      // Mesmo com erro, chamamos o onComplete para não quebrar a experiência do usuário
+      // em um cenário de captura de lead, ou poderíamos exibir um feedback de erro amigável.
+      onComplete();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Simple phone mask simulation for (XX) XXXXX-XXXX
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, "");
+    if (value.length <= 11) {
+      setPhone(value);
+    }
   };
 
   return (
