@@ -22,12 +22,12 @@ const LeadForm: React.FC<LeadFormProps> = ({ onComplete }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || phone.length < 10) return;
-    
+
     setLoading(true);
-    
+
     try {
       const webhookUrl = 'https://n8n-n8n-start.kof6cn.easypanel.host/webhook/f5862221-54eb-48f0-a1e7-2d760f3b56f6';
-      
+
       const response = await fetch(webhookUrl, {
         method: 'POST',
         headers: {
@@ -111,18 +111,20 @@ const LeadForm: React.FC<LeadFormProps> = ({ onComplete }) => {
         <button
           disabled={loading || !name || phone.length < 10}
           type="submit"
-          className="relative w-full group overflow-hidden rounded-2xl p-[1px] transition-all active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none"
+          className="relative w-full group overflow-hidden rounded-2xl p-[1px] transition-all active:scale-[0.98] disabled:cursor-not-allowed disabled:grayscale-[0.3]"
         >
           {/* Animated Border Gradient */}
-          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 via-indigo-500 to-cyan-500 bg-[length:200%_auto] animate-[gradient_3s_linear_infinite] opacity-100"></div>
-          
-          <div className="relative bg-white text-black py-4 px-6 rounded-[15px] flex items-center justify-center gap-3 transition-colors group-hover:bg-transparent group-hover:text-white">
+          {/* Animated Gradient Background - Always Visible now */}
+          <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-white to-cyan-400 bg-[length:200%_auto] animate-[gradient_3s_linear_infinite] opacity-100"></div>
+
+          {/* Button Content */}
+          <div className="relative bg-transparent text-slate-900 py-4 px-6 rounded-[15px] flex items-center justify-center gap-3 transition-all group-hover:bg-white/40 group-hover:scale-[1.05] shadow-[0_0_30px_rgba(34,211,238,0.6)] hover:shadow-[0_0_50px_rgba(34,211,238,0.8)]">
             {loading ? (
               <Loader2 className="animate-spin" size={20} />
             ) : (
               <>
-                <span className="font-black text-xs uppercase tracking-tight">Quero meu site em 3 dias</span>
-                <ArrowRight className="group-hover:translate-x-1.5 transition-transform duration-300" size={18} />
+                <span className="font-black text-xs uppercase tracking-tight drop-shadow-md">Quero meu site em 3 dias</span>
+                <ArrowRight className="group-hover:translate-x-1.5 transition-transform duration-300 drop-shadow-md" size={18} />
               </>
             )}
           </div>
@@ -137,7 +139,7 @@ const LeadForm: React.FC<LeadFormProps> = ({ onComplete }) => {
         </p>
         <div className="h-[1px] w-8 bg-gradient-to-l from-transparent to-slate-500"></div>
       </div>
-      
+
       <style>{`
         @keyframes gradient {
           0% { background-position: 0% 50%; }

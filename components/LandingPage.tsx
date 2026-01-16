@@ -39,13 +39,9 @@ const LandingPage: React.FC = () => {
 
           <div className="space-y-3">
             <h1 className="text-5xl md:text-6xl font-black tracking-tight leading-[1] md:leading-[1]">
-              <span className="block text-slate-200">Domine o</span>
+              <span className="block text-slate-200">Seu Site no ar</span>
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-white to-indigo-400">
-                Digital Agora.
-              </span>
-              <span className="relative inline-block mt-1">
-                <span className="relative z-10 text-white">Em 72 Horas.</span>
-                <span className="absolute -bottom-2 left-0 w-full h-1 bg-cyan-500/30 blur-[2px]"></span>
+                em 72 horas!
               </span>
             </h1>
 
